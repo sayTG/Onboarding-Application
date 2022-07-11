@@ -2,11 +2,12 @@
 
 namespace OnboardingAPI.Models
 {
-    public class BaseEntity
+    public abstract class BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public int Deleted { get; set; }
     }
 }

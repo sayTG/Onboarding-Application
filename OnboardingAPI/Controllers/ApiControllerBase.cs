@@ -14,7 +14,7 @@ namespace OnboardingAPI.Controllers
                 ApiNoContentResponse => NoContent(),
                 ApiNotFoundResponse => NotFound(new ErrorDetails
                 {
-                    Message = ((ApiBadRequestResponse)baseResponse).Message,
+                    Message = ((ApiNotFoundResponse)baseResponse).Message,
                     StatusCode = StatusCodes.Status404NotFound
                 }),
                 ApiBadRequestResponse => BadRequest(new ErrorDetails

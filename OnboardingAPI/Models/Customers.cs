@@ -6,7 +6,7 @@ namespace OnboardingAPI.Models
     public class Customers : BaseEntity
     {
         [Key]
-        public Guid CustomerId { get; set; }
+        public Guid CustomerId { get; set; } = Guid.NewGuid();  
         [Required]
         public string? PhoneNumber { get; set; }
         public bool VerifiedNumber { get; set; }

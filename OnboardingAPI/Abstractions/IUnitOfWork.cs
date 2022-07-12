@@ -7,6 +7,6 @@ namespace OnboardingAPI.Abstractions
         ICustomersRepo CustomersRepo { get; }
         IStatesRepo StatesRepo { get; }
         ILocalGovtsRepo LocalGovtsRepo { get; }
-        int Save();
+        Task<int> Save();
     }
 }

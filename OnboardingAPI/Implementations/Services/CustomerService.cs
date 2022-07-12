@@ -1,4 +1,5 @@
-﻿using OnboardingAPI.Abstractions;
+﻿using Microsoft.AspNetCore.Identity;
+using OnboardingAPI.Abstractions;
 using OnboardingAPI.Abstractions.IMappingConfig;
 using OnboardingAPI.Abstractions.IServices;
 using OnboardingAPI.Models;
@@ -21,17 +22,17 @@ namespace OnboardingAPI.Implementations.Services
         {
             try
             {
-                Customers? customer = await _unitOfWork.CustomersRepo.Get(phoneNumber);
+                Customers? customer = _unitOfWork.CustomersRepo.GetCustomerByPhoneNumber(phoneNumber);
                 if (customer == null)
                     return new ApiNotFoundResponse("Customer Not Found!");
                 customer.VerifiedNumber = true;
                 _unitOfWork.CustomersRepo.Update(customer);
-                _unitOfWork.Save();
+                await _unitOfWork.Save();
                 return new ApiOkResponse<string?>("Verified Successfully, Onboarding completed!");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception Verfiy Phone Number caught: {0}", e);
+                Console.WriteLine("Exception Verfiy Phone Number caught: {0}", e.Message);
                 throw new Exception(e.Message);
             }
         }
@@ -39,7 +40,11 @@ namespace OnboardingAPI.Implementations.Services
         {
             try
             {
+                if (_unitOfWork.CustomersRepo.GetCustomerByPhoneNumber(customerDTO.PhoneNumber) != null)
+                    return new ApiOkResponse<string?>("Customer already exists!");
                 Customers customer = new();
+                var password = new PasswordHasher<Customers>();
+                customer.Password = password.HashPassword(customer, customerDTO.Password);
                 _customMapping.InMap(customer, customerDTO);
                 await _unitOfWork.CustomersRepo.Insert(customer);
 
@@ -51,11 +56,13 @@ namespace OnboardingAPI.Implementations.Services
                 _customMapping.InMap(state, customerDTO);
                 await _unitOfWork.StatesRepo.Insert(state);
 
+                await _unitOfWork.Save();
+
                 return new ApiOkResponse<string?>("Please verify your phone number to complete your onboarding process");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception Onboard Customer caught: {0}", e);
+                Console.WriteLine("Exception Onboard Customer caught: {0}", e.Message);
                 throw new Exception(e.Message);
             }
         }

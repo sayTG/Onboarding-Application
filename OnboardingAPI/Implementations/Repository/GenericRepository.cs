@@ -23,7 +23,7 @@ namespace OnboardingAPI.Implementations.Repository
             return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task Add(T entity)
+        public async Task Insert(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
         }

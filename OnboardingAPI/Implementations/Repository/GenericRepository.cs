@@ -13,7 +13,7 @@ namespace OnboardingAPI.Implementations.Repository
             _context = context;
         }
 
-        public async Task<T?> Get(int id)
+        public async Task<T?> Get(dynamic id)
         {
             return await _context.Set<T>().FindAsync(id);
         }

@@ -18,15 +18,15 @@ namespace OnboardingAPI.Interceptors
                     switch (changedEntity.State)
                     {
                         case EntityState.Added:
-                            baseEntity.CreatedDate = DateTime.Now;
-                            baseEntity.UpdatedDate = DateTime.Now;
+                            baseEntity.CreatedDateTime = DateTime.Now;
+                            baseEntity.ModifiedDateTime = DateTime.Now;
                             break;
 
                         case EntityState.Modified:
-                            baseEntity.UpdatedDate = DateTime.Now;
+                            baseEntity.ModifiedDateTime = DateTime.Now;
                             break;
                         case EntityState.Deleted:
-                            baseEntity.UpdatedDate = DateTime.Now;
+                            baseEntity.ModifiedDateTime = DateTime.Now;
                             baseEntity.Deleted = baseEntity.Id;
                             break;
                     }

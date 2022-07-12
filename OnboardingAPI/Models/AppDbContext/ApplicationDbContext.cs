@@ -9,7 +9,7 @@ namespace OnboardingAPI.Models.AppDbContext
         {
             base.OnModelCreating(builder);
             builder.Entity<Customers>()
-                   .HasIndex(c => c.Email)
+                   .HasIndex(c => new { c.Email, c.PhoneNumber })
                    .IsUnique();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.AddInterceptors(new SavingChangesInterceptor());

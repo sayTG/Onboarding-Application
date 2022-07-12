@@ -2,7 +2,7 @@
 
 namespace OnboardingAPI.Abstractions.IRepository
 {
-    public interface ICustomersRepo : IGenericRepository<Customers>
+    public interface IStatesRepo : IGenericRepository<States>
     {
     }
 }

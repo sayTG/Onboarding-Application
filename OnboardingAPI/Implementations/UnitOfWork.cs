@@ -8,12 +8,16 @@ namespace OnboardingAPI.Implementations
     {
         private readonly ApplicationDbContext _context;
         public ICustomersRepo CustomersRepo { get; }
+        public IStatesRepo StatesRepo { get; }
+        public ILocalGovtsRepo LocalGovtsRepo { get; }
 
         public UnitOfWork(ApplicationDbContext context,
-            ICustomersRepo customersRepo)
+            ICustomersRepo customersRepo, IStatesRepo statesRepo, ILocalGovtsRepo localGovtsRepo)
         {
             _context = context;
             CustomersRepo = customersRepo;
+            LocalGovtsRepo = localGovtsRepo;
+            StatesRepo = statesRepo;
         }
         public int Save()
         {

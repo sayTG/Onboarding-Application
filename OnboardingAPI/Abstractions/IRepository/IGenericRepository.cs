@@ -2,7 +2,7 @@
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<T?> Get(int id);
+        Task<T?> Get(dynamic id);
         Task<IEnumerable<T>> GetAll();
         Task Insert(T entity);
         void Delete(T entity);

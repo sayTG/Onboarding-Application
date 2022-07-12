@@ -6,8 +6,8 @@ namespace OnboardingAPI.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public DateTime ModifiedDateTime { get; set; }
         public int Deleted { get; set; }
     }
 }

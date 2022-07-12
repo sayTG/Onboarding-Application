@@ -9,6 +9,7 @@ namespace OnboardingAPI.Models
         public Guid CustomerId { get; set; }
         [Required]
         public string? PhoneNumber { get; set; }
+        public bool VerifiedNumber { get; set; }
         [Required]
         public string? Email { get; set; }
         [Required]

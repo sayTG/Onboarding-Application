@@ -21,6 +21,11 @@ namespace OnboardingAPI.Controllers
                     Message = ((ApiBadRequestResponse)baseResponse).Message,
                     StatusCode = StatusCodes.Status400BadRequest
                 }),
+                ApiUnAuthorizedResponse => Unauthorized(new ErrorDetails
+                {
+                    Message = ((ApiUnAuthorizedResponse)baseResponse).Message,
+                    StatusCode = StatusCodes.Status401Unauthorized
+                }),
                 _ => throw new NotImplementedException()
             };
         }

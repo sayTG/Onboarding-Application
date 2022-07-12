@@ -13,9 +13,11 @@ namespace OnboardingAPI.Controllers
     public class CustomersController : ApiControllerBase
     {
         private readonly ICustomerService _customerService;
-        public CustomersController(ICustomerService customerService)
+        private readonly IClientService _clientService;
+        public CustomersController(ICustomerService customerService, IClientService clientService)
         {
             _customerService = customerService;
+            _clientService = clientService;
         }
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllCustomers()
@@ -24,6 +26,14 @@ namespace OnboardingAPI.Controllers
             if (!result.Success)
                 return ProcessError(result);
             return Ok(result.GetResult<IEnumerable<Customers>>());
+        }
+        [HttpGet("GetAllBanks")]
+        public async Task<IActionResult> GetAllBanks()
+        {
+            ApiBaseResponse result = await _clientService.GetAllBanks();
+            if (!result.Success)
+                return ProcessError(result);
+            return Ok(result.GetResult<List<BankDTO>>());
         }
         [HttpGet("Verify")]
         public async Task<IActionResult> VerifyPhoneNumber(string phoneNumber)

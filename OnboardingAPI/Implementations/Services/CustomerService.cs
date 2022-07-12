@@ -5,6 +5,7 @@ using OnboardingAPI.Abstractions.IServices;
 using OnboardingAPI.Models;
 using OnboardingAPI.Models.DTOs;
 using OnboardingAPI.Models.Responses;
+using OnboardingAPI.Utilities.Clients;
 
 namespace OnboardingAPI.Implementations.Services
 {

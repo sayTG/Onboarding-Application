@@ -16,9 +16,11 @@ namespace OnboardingAPI.Tests.ControllerTests
     public class CustomersControllerTests
     {
         private readonly Mock<ICustomerService> _customerServiceMock;
+        private readonly Mock<IClientService> _clientServiceMock;
         public CustomersControllerTests()
         {
             _customerServiceMock = new Mock<ICustomerService>(MockBehavior.Default);
+            _clientServiceMock = new Mock<IClientService>(MockBehavior.Default);
         }
         #region GetAllCustomers 
         [Fact]
@@ -26,7 +28,7 @@ namespace OnboardingAPI.Tests.ControllerTests
         {
             // Arrange
             _customerServiceMock.Setup(d => d.GetAllCustomers()).ReturnsAsync(new ApiNotFoundResponse(""));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.GetAllCustomers();
@@ -42,7 +44,7 @@ namespace OnboardingAPI.Tests.ControllerTests
         {
             // Arrange
             _customerServiceMock.Setup(d => d.GetAllCustomers()).ReturnsAsync(new ApiBadRequestResponse(""));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.GetAllCustomers();
@@ -59,7 +61,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             // Arrange
             string value = "";
             _customerServiceMock.Setup(d => d.GetAllCustomers()).ReturnsAsync(new ApiOkResponse<string>(value));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
 
@@ -72,7 +74,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             // Arrange
             IEnumerable<Customers> customers = new List<Customers>();
             _customerServiceMock.Setup(d => d.GetAllCustomers()).ReturnsAsync(new ApiOkResponse<IEnumerable<Customers>>(customers));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.GetAllCustomers();
@@ -86,13 +88,79 @@ namespace OnboardingAPI.Tests.ControllerTests
         }
         #endregion 
 
+        #region GetAllBanks 
+        [Fact]
+        public async void GetAllBanks_ApiNotFoundResponse_ReturnsNotFound()
+        {
+            // Arrange
+            _clientServiceMock.Setup(d => d.GetAllBanks()).ReturnsAsync(new ApiNotFoundResponse(""));
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
+
+            // Act
+            IActionResult actual = await _controller.GetAllBanks();
+            NotFoundObjectResult actualStatusCode = (NotFoundObjectResult)actual;
+
+            // Assert
+            Assert.NotNull(actual);
+            Assert.IsType<NotFoundObjectResult>(actual);
+            Assert.Equal(404, actualStatusCode.StatusCode);
+        }
+        [Fact]
+        public async void GetAllBanks_ApiBadRequestResponse_ReturnBadRequest()
+        {
+            // Arrange
+            _clientServiceMock.Setup(d => d.GetAllBanks()).ReturnsAsync(new ApiBadRequestResponse(""));
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
+
+            // Act
+            IActionResult actual = await _controller.GetAllBanks();
+            BadRequestObjectResult actualStatusCode = (BadRequestObjectResult)actual;
+
+            // Assert
+            Assert.NotNull(actual);
+            Assert.IsType<BadRequestObjectResult>(actual);
+            Assert.Equal(400, actualStatusCode.StatusCode);
+        }
+        [Fact]
+        public async void GetAllBanks_ApiOkResponseAndInvalidReturnType_ThrowsInvalidCastException()
+        {
+            // Arrange
+            string value = "";
+            _clientServiceMock.Setup(d => d.GetAllBanks()).ReturnsAsync(new ApiOkResponse<string>(value));
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
+
+            // Act
+
+            // Assert
+            await Assert.ThrowsAsync<InvalidCastException>(() => _controller.GetAllBanks());
+        }
+        [Fact]
+        public async void GetAllBanks_ApiOkResponseAndValidReturnType_ReturnOk()
+        {
+            // Arrange
+            List<BankDTO> banks = new();
+            _clientServiceMock.Setup(d => d.GetAllBanks()).ReturnsAsync(new ApiOkResponse<List<BankDTO>>(banks));
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
+
+            // Act
+            IActionResult actual = await _controller.GetAllBanks();
+            OkObjectResult actualStatusCode = (OkObjectResult)actual;
+
+            // Assert
+            Assert.NotNull(actual);
+            Assert.IsType<OkObjectResult>(actual);
+            Assert.IsType<List<BankDTO>>(actualStatusCode.Value);
+            Assert.Equal(200, actualStatusCode.StatusCode);
+        }
+        #endregion 
+
         #region VerifyPhoneNumber 
         [Fact]
         public async void VerifyPhoneNumber_InValidRequest_ReturnsBadRequest()
         {
             // Arrange
             string phoneNumber = string.Empty;
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.VerifyPhoneNumber(phoneNumber);
@@ -109,7 +177,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             // Arrange
             string phoneNumber = "1234";
             _customerServiceMock.Setup(d => d.VerifyPhoneNumber(phoneNumber)).ReturnsAsync(new ApiNotFoundResponse(""));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.VerifyPhoneNumber(phoneNumber);
@@ -126,7 +194,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             // Arrange
             string phoneNumber = "1234";
             _customerServiceMock.Setup(d => d.VerifyPhoneNumber(phoneNumber)).ReturnsAsync(new ApiBadRequestResponse(""));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.VerifyPhoneNumber(phoneNumber);
@@ -144,7 +212,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             string phoneNumber = "1234";
             int value = 0;
             _customerServiceMock.Setup(d => d.VerifyPhoneNumber(phoneNumber)).ReturnsAsync(new ApiOkResponse<int>(value));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
 
@@ -158,7 +226,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             string phoneNumber = "1234";
             string result = "Successfully";
             _customerServiceMock.Setup(d => d.VerifyPhoneNumber(phoneNumber)).ReturnsAsync(new ApiOkResponse<string>(result));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.VerifyPhoneNumber(phoneNumber);
@@ -179,7 +247,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             // Arrange
             CustomerDTO customerDTO = new();
             _customerServiceMock.Setup(d => d.OnboardCustomer(customerDTO)).ReturnsAsync(new ApiNotFoundResponse(""));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.OnboardCustomers(customerDTO);
@@ -196,7 +264,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             // Arrange
             CustomerDTO customerDTO = new();
             _customerServiceMock.Setup(d => d.OnboardCustomer(customerDTO)).ReturnsAsync(new ApiBadRequestResponse(""));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.OnboardCustomers(customerDTO);
@@ -214,7 +282,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             CustomerDTO customerDTO = new();
             int value = 0;
             _customerServiceMock.Setup(d => d.OnboardCustomer(customerDTO)).ReturnsAsync(new ApiOkResponse<int>(value));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
 
@@ -228,7 +296,7 @@ namespace OnboardingAPI.Tests.ControllerTests
             CustomerDTO customerDTO = new();
             string result = "Successfully";
             _customerServiceMock.Setup(d => d.OnboardCustomer(customerDTO)).ReturnsAsync(new ApiOkResponse<string>(result));
-            CustomersController _controller = new(_customerServiceMock.Object);
+            CustomersController _controller = new(_customerServiceMock.Object, _clientServiceMock.Object);
 
             // Act
             IActionResult actual = await _controller.OnboardCustomers(customerDTO);

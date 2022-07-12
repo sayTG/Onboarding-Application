@@ -12,10 +12,12 @@ namespace OnboardingAPI.Implementations.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICustomMapping _customMapping;
-        public CustomerService(IUnitOfWork unitOfWork, ICustomMapping customMapping)
+        private readonly IPasswordHasher<Customers> _passwordHarsher;
+        public CustomerService(IUnitOfWork unitOfWork, ICustomMapping customMapping, IPasswordHasher<Customers> passwordHarsher)
         {
             _unitOfWork = unitOfWork;
             _customMapping = customMapping;
+            _passwordHarsher = passwordHarsher;
         }
         public async Task<ApiBaseResponse> GetAllCustomers() => new ApiOkResponse<IEnumerable<Customers>>(await _unitOfWork.CustomersRepo.GetAll());
         public async Task<ApiBaseResponse> VerifyPhoneNumber(string phoneNumber)
@@ -43,8 +45,7 @@ namespace OnboardingAPI.Implementations.Services
                 if (_unitOfWork.CustomersRepo.GetCustomerByPhoneNumber(customerDTO.PhoneNumber) != null)
                     return new ApiOkResponse<string?>("Customer already exists!");
                 Customers customer = new();
-                var password = new PasswordHasher<Customers>();
-                customer.Password = password.HashPassword(customer, customerDTO.Password);
+                customer.Password = _passwordHarsher.HashPassword(customer, customerDTO.Password);
                 _customMapping.InMap(customer, customerDTO);
                 await _unitOfWork.CustomersRepo.Insert(customer);
 

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnboardingAPI.Abstractions;
 using OnboardingAPI.Abstractions.IMappingConfig;
@@ -7,6 +8,7 @@ using OnboardingAPI.Implementations;
 using OnboardingAPI.Implementations.MappingConfig;
 using OnboardingAPI.Implementations.Repository;
 using OnboardingAPI.Implementations.Services;
+using OnboardingAPI.Models;
 using OnboardingAPI.Models.AppDbContext;
 using System.Configuration;
 
@@ -23,6 +25,7 @@ builder.Services.AddScoped<ILocalGovtsRepo, LocalGovtsRepo>();
 builder.Services.AddScoped<IStatesRepo, StatesRepo>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICustomMapping, CustomMapping>();
+builder.Services.AddScoped<IPasswordHasher<Customers>, PasswordHasher<Customers>>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

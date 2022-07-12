@@ -11,7 +11,6 @@ namespace OnboardingAPI.Controllers
         {
             return baseResponse switch
             {
-                ApiNoContentResponse => NoContent(),
                 ApiNotFoundResponse => NotFound(new ErrorDetails
                 {
                     Message = ((ApiNotFoundResponse)baseResponse).Message,

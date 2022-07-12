@@ -1,4 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using OnboardingAPI.Abstractions;
+using OnboardingAPI.Abstractions.IRepository;
+using OnboardingAPI.Abstractions.IServices;
+using OnboardingAPI.Implementations;
+using OnboardingAPI.Implementations.Repository;
+using OnboardingAPI.Implementations.Services;
 using OnboardingAPI.Models.AppDbContext;
 using System.Configuration;
 
@@ -9,6 +15,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApiDbConnection")));
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICustomersRepo, CustomersRepo>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

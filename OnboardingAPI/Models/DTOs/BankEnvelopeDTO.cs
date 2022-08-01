@@ -2,9 +2,9 @@
 {
     public class BankEnvelopeDTO
     {
-        public List<BankDTO>? BankDTO { get; set; }
-        public string? ErrorMessage { get; set; }
-        public bool HasError { get; set; }
+        public List<BankDTO>? Result { get; set; }
+        //public string? ErrorMessage { get; set; }
+        //public bool HasError { get; set; }
     }
     public class BankDTO
     {

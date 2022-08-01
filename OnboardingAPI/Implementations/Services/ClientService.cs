@@ -1,9 +1,10 @@
-﻿using OnboardingAPI.Models.Responses;
+﻿using OnboardingAPI.Abstractions.IServices;
+using OnboardingAPI.Models.Responses;
 using OnboardingAPI.Utilities.Clients;
 
 namespace OnboardingAPI.Implementations.Services
 {
-    public class ClientService
+    public class ClientService : IClientService
     {
         private readonly AlatTestClients _alatTestClients;
         public ClientService(AlatTestClients alatTestClients)

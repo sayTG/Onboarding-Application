@@ -17,11 +17,11 @@ namespace OnboardingAPI.Utilities.Clients
             HttpResponseMessage response = await _httpClient.GetAsync("GetAllBanks");
             if (response.IsSuccessStatusCode)
             {
-                BankEnvelopeDTO? result = await response.Content.ReadFromJsonAsync<BankEnvelopeDTO>();
-                if (result == null)
-                    return new ApiOkResponse<List<BankDTO>?>(null);
+                BankEnvelopeDTO? res = await response.Content.ReadFromJsonAsync<BankEnvelopeDTO>();
+                if (res == null)
+                    return new ApiOkResponse<List<BankDTO>?>(null); //should be 204 (No content)
 
-                return new ApiOkResponse<List<BankDTO>?>(result.BankDTO);
+                return new ApiOkResponse<List<BankDTO>?>(res.Result);
             }
             else
             {

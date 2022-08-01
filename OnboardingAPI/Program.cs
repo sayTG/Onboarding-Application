@@ -27,6 +27,7 @@ builder.Services.AddScoped<ILocalGovtsRepo, LocalGovtsRepo>();
 builder.Services.AddScoped<IStatesRepo, StatesRepo>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICustomMapping, CustomMapping>();
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IPasswordHasher<Customers>, PasswordHasher<Customers>>();
 
 builder.Services.AddHttpClient<AlatTestClients>(c => c.BaseAddress = new Uri("https://wema-alatdev-apimgt.azure-api.net/alat-test/api/Shared/"));

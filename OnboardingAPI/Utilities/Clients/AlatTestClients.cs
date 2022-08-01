@@ -13,7 +13,7 @@ namespace OnboardingAPI.Utilities.Clients
         public async Task<ApiBaseResponse> GetAllBanks()
         {
             _httpClient.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
-            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", AlatTestKey.AlatTestSubcriptionKey);
+            //_httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", AlatTestKey.AlatTestSubcriptionKey);
             HttpResponseMessage response = await _httpClient.GetAsync("GetAllBanks");
             if (response.IsSuccessStatusCode)
             {

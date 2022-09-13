@@ -26,6 +26,8 @@ namespace OnboardingAPI.Interceptors
                             baseEntity.ModifiedDateTime = DateTime.Now;
                             break;
                         case EntityState.Deleted:
+                            changedEntity.State = EntityState.Modified;
+                            changedEntity.Property("Id").IsModified = false;
                             baseEntity.ModifiedDateTime = DateTime.Now;
                             baseEntity.Deleted = baseEntity.Id;
                             break;

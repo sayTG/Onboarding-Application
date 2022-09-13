@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OnboardingAPI.Abstractions;
 using OnboardingAPI.Abstractions.IServices;
 using OnboardingAPI.Extensions;
 using OnboardingAPI.Models;
@@ -14,10 +15,12 @@ namespace OnboardingAPI.Controllers
     {
         private readonly ICustomerService _customerService;
         private readonly IClientService _clientService;
-        public CustomersController(ICustomerService customerService, IClientService clientService)
+        private readonly IUnitOfWork _unitOfWork;
+        public CustomersController(ICustomerService customerService, IClientService clientService, IUnitOfWork unitOfWork)
         {
             _customerService = customerService;
             _clientService = clientService;
+            _unitOfWork = unitOfWork;
         }
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllCustomers()
@@ -54,6 +57,14 @@ namespace OnboardingAPI.Controllers
             if (!result.Success)
                 return ProcessError(result);
             return Ok(result.GetResult<string>());
+        }
+        [HttpDelete("DeleteOnboard")]
+        public async Task<IActionResult> DeleteCustomers(Guid id)
+        {
+            var gg = await _unitOfWork.CustomersRepo.Get(id);
+            _unitOfWork.CustomersRepo.Delete(gg);
+            await _unitOfWork.Save();
+            return Ok("heeh");
         }
     }
 }

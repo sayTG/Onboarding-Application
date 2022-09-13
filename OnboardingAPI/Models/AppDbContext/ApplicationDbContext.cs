@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using OnboardingAPI.Interceptors;
 
 namespace OnboardingAPI.Models.AppDbContext
@@ -11,6 +12,7 @@ namespace OnboardingAPI.Models.AppDbContext
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //builder.Entity<Customers>().Property(c => c.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             base.OnModelCreating(builder);
             builder.Entity<Customers>()
                    .HasIndex(c => new { c.Email, c.PhoneNumber })

@@ -5,7 +5,6 @@ using OnboardingAPI.Abstractions.IServices;
 using OnboardingAPI.Models;
 using OnboardingAPI.Models.DTOs;
 using OnboardingAPI.Models.Responses;
-using OnboardingAPI.Utilities.Clients;
 
 namespace OnboardingAPI.Implementations.Services
 {
@@ -23,21 +22,13 @@ namespace OnboardingAPI.Implementations.Services
         public async Task<ApiBaseResponse> GetAllCustomers() => new ApiOkResponse<IEnumerable<Customers>>(await _unitOfWork.CustomersRepo.GetAll());
         public async Task<ApiBaseResponse> VerifyPhoneNumber(string phoneNumber)
         {
-            try
-            {
-                Customers? customer = _unitOfWork.CustomersRepo.GetCustomerByPhoneNumber(phoneNumber);
-                if (customer == null)
-                    return new ApiNotFoundResponse("Customer Not Found!");
-                customer.VerifiedNumber = true;
-                _unitOfWork.CustomersRepo.Update(customer);
-                await _unitOfWork.Save();
-                return new ApiOkResponse<string?>("Verified Successfully, Onboarding completed!");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception Verfiy Phone Number caught: {0}", e.Message);
-                throw new Exception(e.Message);
-            }
+            Customers? customer = _unitOfWork.CustomersRepo.GetCustomerByPhoneNumber(phoneNumber);
+            if (customer == null)
+                return new ApiNotFoundResponse("Customer Not Found!");
+            customer.VerifiedNumber = true;
+            _unitOfWork.CustomersRepo.Update(customer);
+            await _unitOfWork.Save();
+            return new ApiOkResponse<string?>("Verified Successfully, Onboarding completed!");
         }
         public async Task<ApiBaseResponse> OnboardCustomer(CustomerDTO customerDTO)
         {

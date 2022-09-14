@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using OnboardingAPI.Extensions;
 using OnboardingAPI.Interceptors;
 
 namespace OnboardingAPI.Models.AppDbContext
@@ -14,6 +15,16 @@ namespace OnboardingAPI.Models.AppDbContext
         {
             //builder.Entity<Customers>().Property(c => c.Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             base.OnModelCreating(builder);
+
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                //other automated configurations left out
+                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    entityType.AddSoftDeleteQueryFilter();
+                }
+            }
+
             builder.Entity<Customers>()
                    .HasIndex(c => new { c.Email, c.PhoneNumber })
                    .IsUnique();
